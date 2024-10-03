@@ -2,6 +2,7 @@ import { useState } from "react";
 import { FcGoogle } from "react-icons/fc";
 import { FaGithub } from "react-icons/fa";
 import { TriangleAlert } from "lucide-react";
+import { useAuthActions } from "@convex-dev/auth/react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -21,6 +22,8 @@ interface SignInCardProps {
 }
 
 export const SignInCard = ({ setState }: SignInCardProps) => {
+  const { signIn } = useAuthActions();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -32,7 +35,10 @@ export const SignInCard = ({ setState }: SignInCardProps) => {
   };
 
   const onProviderSignIn = (value: "github" | "google") => {
-    console.log("onProviderSignIn", value);
+    setPending(true);
+    signIn(value).finally(() => {
+      setPending(false);
+    });
   };
 
   return (
