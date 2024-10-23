@@ -31,7 +31,15 @@ export const SignInCard = ({ setState }: SignInCardProps) => {
 
   const onPasswordSignIn = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log("onPasswordSignIn", email, password);
+
+    setPending(true);
+    signIn("password", { email, password, flow: "signIn" })
+      .catch(() => {
+        setError("Invalid email or password");
+      })
+      .finally(() => {
+        setPending(false);
+      });
   };
 
   const onProviderSignIn = (value: "github" | "google") => {
